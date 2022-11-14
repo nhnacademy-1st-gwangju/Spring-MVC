@@ -6,7 +6,7 @@
     <title>학생 정보 조회</title>
 </head>
 <body>
-    이름: ${student.id}<br />
+    이름: ${student.name}<br />
     이메일: ${student.email}<br />
     <c:choose>
         <c:when test="${hideScore != 'yes'}">
