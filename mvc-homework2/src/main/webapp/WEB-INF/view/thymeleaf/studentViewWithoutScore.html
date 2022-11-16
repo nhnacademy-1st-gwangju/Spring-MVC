@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>학생 정보 조회</title>
+</head>
+<body>
+    <span th:text="#{name} + ': ' + ${student.name}"></span><br />
+    <span th:text="#{email} + ': ' + ${student.email}"></span><br />
+    <span th:if="${hideScore != 'yes'}" th:text="#{score} + ': ' + ${student.score}"></span><br />
+    <span th:if="${hideScore != 'yes'}" th:text="#{comment} + ': ' + ${student.comment}"></span><br />
+    <br />
+    <a th:href="@{/student/{id}/modify(id=${student.id})}" th:text="#{edit}"></a>
+</body>
+</html>
