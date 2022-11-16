@@ -4,6 +4,7 @@ import org.springframework.web.servlet.HandlerInterceptor;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import java.util.Objects;
 
 public class LoginCheckInterceptor implements HandlerInterceptor {
@@ -12,9 +13,8 @@ public class LoginCheckInterceptor implements HandlerInterceptor {
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
         String requestURI = request.getRequestURI();
 
-        String session = (String) request.getSession(false).getAttribute("SESSION");
-
-        if (Objects.isNull(session)) {
+        HttpSession httpSession = request.getSession(false);
+        if (Objects.isNull(httpSession) || httpSession.getAttribute("SESSION") == null) {
             response.sendRedirect("/login?redirectURL=" + requestURI);
             return false;
         }

@@ -87,6 +87,6 @@ public class WebConfig implements WebMvcConfigurer, ApplicationContextAware {
         registry.addInterceptor(new LoginCheckInterceptor())
                 .order(1)
                 .addPathPatterns("/**")
-                .excludePathPatterns("/error", "/", "/login");
+                .excludePathPatterns("/error", "/", "/login", "/students/**");
     }
 }
