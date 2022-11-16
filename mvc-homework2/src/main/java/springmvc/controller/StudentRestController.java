@@ -6,8 +6,9 @@ import org.springframework.web.bind.annotation.*;
 import springmvc.domain.Student;
 import springmvc.domain.StudentModifyRequest;
 import springmvc.domain.StudentRegisterRequest;
-import springmvc.domain.StudentResponseDto;
 import springmvc.repository.StudentRepository;
+
+import javax.validation.Valid;
 
 @RestController
 public class StudentRestController {
@@ -19,22 +20,20 @@ public class StudentRestController {
     }
 
     @GetMapping("/students/{studentId}")
-    public ResponseEntity<StudentResponseDto> getStudent(@PathVariable("studentId") long studentId) {
+    public ResponseEntity<Student> getStudent(@PathVariable("studentId") long studentId) {
         Student student = studentRepository.getStudent(studentId);
-        StudentResponseDto responseDto = new StudentResponseDto(student.getId(), student.getName(), student.getEmail(), student.getScore(), student.getComment());
-        return ResponseEntity.ok(responseDto);
+        return ResponseEntity.ok(student);
     }
 
     @PostMapping("/students")
     @ResponseStatus(HttpStatus.CREATED)
-    public StudentResponseDto registerStudent(@RequestBody StudentRegisterRequest request) {
-        Student student = studentRepository.register(request.getName(), request.getEmail(), request.getScore(), request.getComment());
-        return new StudentResponseDto(student.getId(), student.getName(), student.getEmail(), student.getScore(), student.getComment());
+    public Student registerStudent(@Valid @RequestBody StudentRegisterRequest request) {
+        return studentRepository.register(request.getName(), request.getEmail(), request.getScore(), request.getComment());
     }
 
     @PutMapping("/students/{studentId}")
     public ResponseEntity<Student> modify(@PathVariable("studentId") long studentId,
-                                    @RequestBody StudentModifyRequest request) {
+                                    @Valid @RequestBody StudentModifyRequest request) {
         Student student = studentRepository.getStudent(studentId);
 
         student.setName(request.getName());
@@ -42,8 +41,8 @@ public class StudentRestController {
         student.setScore(request.getScore());
         student.setComment(request.getComment());
 
-        studentRepository.modify(student);
+        Student modify = studentRepository.modify(student);
 
-        return ResponseEntity.ok(student);
+        return ResponseEntity.ok(modify);
     }
 }

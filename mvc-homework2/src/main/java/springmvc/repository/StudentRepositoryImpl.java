@@ -40,7 +40,7 @@ public class StudentRepositoryImpl implements StudentRepository {
     }
 
     @Override
-    public void modify(Student student) {
+    public Student modify(Student student) {
         Student dbStudent = getStudent(student.getId());
         if (Objects.isNull(dbStudent)) {
             throw new StudentNotFoundException();
@@ -52,5 +52,7 @@ public class StudentRepositoryImpl implements StudentRepository {
         dbStudent.setComment(student.getComment());
 
         students.replace(student.getId(), dbStudent);
+
+        return dbStudent;
     }
 }
