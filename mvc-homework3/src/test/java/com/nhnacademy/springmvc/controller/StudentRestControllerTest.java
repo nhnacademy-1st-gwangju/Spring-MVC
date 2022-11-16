@@ -81,11 +81,14 @@ class StudentRestControllerTest {
 
         when(studentRepository.register(INPUT_NAME, INPUT_EMAIL, INPUT_SCORE, INPUT_COMMENT)).thenReturn(student);
 
-        mockMvc.perform(post("/students")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(mapper.writeValueAsString(request)))
+        MvcResult mvcResult = mockMvc.perform(post("/students")
+                        .accept("application/json")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(mapper.writeValueAsString(request)))
                 .andExpect(status().isCreated())
                 .andReturn();
+
+        assertThat(mvcResult.getResponse().getContentAsString()).isEqualTo(mapper.writeValueAsString(student));
     }
 
     @Test
