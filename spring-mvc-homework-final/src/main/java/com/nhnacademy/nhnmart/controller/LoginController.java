@@ -40,9 +40,9 @@ public class LoginController {
 
     @PostMapping("/login")
     public String doLogin(@Valid @ModelAttribute LoginRequest request,
+                          BindingResult bindingResult,
                           HttpSession session,
-                          ModelMap modelMap,
-                          BindingResult bindingResult) {
+                          ModelMap modelMap) {
         if (bindingResult.hasErrors()) {
             throw new ValidationFailedException(bindingResult);
         }

@@ -23,24 +23,29 @@ public class AdminController {
 
     private final InquiryRepository inquiryRepository;
 
-    // GET: "/cs/admin" 담당자 메인(답변 안달린 문의 목록)
-//    @GetMapping("/")
-//    public String adminMain(ModelMap modelMap) {
-//        List<Inquiry> unansweredInquiries = inquiryRepository.getUnansweredInquiries();
-//
-//        modelMap.put("inquiries", unansweredInquiries);
-//        return "adminMain";
-//    }
+    @GetMapping
+    public String adminMain(@RequestParam(value = "category", required = false) String category,
+                                 ModelMap modelMap) {
+        List<Inquiry> inquiries = getInquiries(category);
+        modelMap.put("inquiries", inquiries);
 
-    // GET: "/cs/admin/{inquiryId}/answer" 답변 폼
+        return "adminMain";
+    }
+
+    private List<Inquiry> getInquiries(String category) {
+        if (category == null || Objects.equals(category, "")) {
+            return inquiryRepository.getAllInquiries();
+        }
+
+        return inquiryRepository.findAllByCategory(category);
+    }
+
     @GetMapping("/{inquiryId}/answer")
     public String answerForm(@PathVariable long inquiryId, ModelMap modelMap) {
         modelMap.put("inquiryId", inquiryId);
         return "answerRegister";
     }
 
-
-    // GET: "/cs/admin/{inquiryId}" 문의 상세 조회
     @GetMapping("/{inquiryId}")
     public String getUnansweredInquiry(@PathVariable long inquiryId, ModelMap modelMap) {
         Inquiry inquiry = inquiryRepository.getInquiry(inquiryId);
@@ -53,7 +58,6 @@ public class AdminController {
         return "inquiryView";
     }
 
-    // POST: "/cs/admin/{inquiryId}/answer" 답변 처리
     @PostMapping("/{inquiryId}/answer")
     public String registerAnswer(@PathVariable long inquiryId,
                                  @Valid @ModelAttribute AnswerRegisterRequest request,
@@ -68,23 +72,5 @@ public class AdminController {
 
         modelMap.put("inquiry", inquiry);
         return "inquiryView";
-    }
-
-    // GET: "/cs/admin?category" 카테고리로 분류
-    @GetMapping
-    public String findByCategory(@RequestParam(value = "category", required = false) String category,
-                                 ModelMap modelMap) {
-        List<Inquiry> inquiries = getInquiries(category);
-        modelMap.put("inquiries", inquiries);
-
-        return "adminMain";
-    }
-
-    private List<Inquiry> getInquiries(String category) {
-        if (category == null || Objects.equals(category, "")) {
-            return inquiryRepository.getAllInquiries();
-        }
-
-        return inquiryRepository.findAllByCategory(category);
     }
 }
