@@ -32,8 +32,8 @@ public class RootConfig {
     @Bean
     public InquiryRepository inquiryRepository() {
         InquiryRepositoryImpl inquiryRepository = new InquiryRepositoryImpl();
-        inquiryRepository.registerInquiry("송학현씨를 칭찬합니다", "Praise", "테스트 본문", "Ramos", new ArrayList<>());
-        inquiryRepository.registerInquiry("학현이의 닉네임은 Ramos", "Praise", "테스트 본문", "Ramos", new ArrayList<>());
+        inquiryRepository.registerInquiry("Test1", "Praise", "테스트 본문", "Ramos", new ArrayList<>());
+        inquiryRepository.registerInquiry("Test2", "Praise", "테스트 본문", "Ramos", new ArrayList<>());
 
         return inquiryRepository;
     }
