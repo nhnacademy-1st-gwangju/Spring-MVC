@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>NHN Mart CS Service - 문의 상세 페이지</title>
+</head>
+<body>
+<h1>문의 상세 페이지</h1>
+<h4>제목</h4>
+<span th:text="${inquiry.title}"></span>
+
+<h4>분류</h4>
+<span th:text="${inquiry.category}"></span>
+
+<h4>본문</h4>
+<span th:text="${inquiry.content}"></span>
+
+<h4>작성일</h4>
+<span th:text="${inquiry.createdAt}"></span>
+
+<h4>작성자</h4>
+<span th:text="${inquiry.author}"></span>
+
+<h4>첨부 파일</h4>
+<span th:each="imageFile : ${inquiry.imageFiles}">
+    <img th:src="@{/cs/images/{imageFile}(imageFile=${imageFile})}" width="200"/>
+</span>
+
+<h4>답변</h4>
+<div th:if="${inquiry.answer}">
+    <span th:text="답변내용 + ': '"></span><span th:text="${inquiry.answer.comment}"></span><br />
+    <span th:text="답변자 + ': '"></span><span th:text="${inquiry.answer.adminName}"></span><br />
+    <span th:text="답변일 + ': '"></span><span th:text="${inquiry.answer.createdAt}"></span><br />
+</div>
+<div th:if="${inquiry.answer == null}">
+    <span th:text="답변안됨"></span><br />
+    <a th:href="@{/cs/admin/{id}/answer(id=${inquiry.id})}" th:if="${#session.getAttribute('SESSION') == 'ROLE_ADMIN'}">답변 등록하기</a>
+</div>
+<a href="/cs" th:text="홈으로"></a>
+</body>
+</html>

@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>NHN Mart CS Service - 답변 작성 페이지</title>
+</head>
+<body>
+<form method="post" th:action="@{/cs/admin/{inquiryId}/answer(inquiryId=${inquiryId})}">
+    <span th:text="답변내용 + ': '"></span><textarea name="comment" cols="20" rows="30"></textarea><br />
+    <span th:text="담당자 + ': '"></span><input type="text" name="adminName" th:value="${#session.getAttribute('NAME')}" readonly /><br />
+    <br />
+    <input type="submit" />
+</form><br />
+<a href="/cs/admin" th:text="취소"></a>
+</body>
+</html>

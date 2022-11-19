@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>NHN Mart CS Service - 관리자 메인 페이지</title>
+</head>
+<body>
+<h1>답변이 달리지 않은 문의 목록</h1>
+<form method="get" action="/cs/admin?">
+    <label>
+        <select name="category">
+            <option value="">--분류--</option>
+            <option value="Complaint">불만 접수</option>
+            <option value="Proposal">제안</option>
+            <option value="RefundOrExchange">환불/교환</option>
+            <option value="Praise">칭찬해요</option>
+            <option value="Etc">기타 문의</option>
+        </select>
+    </label>
+    <input type="submit" value="카테고리로 검색"/>
+</form>
+<br/>
+<table>
+    <tr>
+        <th th:text="제목"></th>
+        <th th:text="분류"></th>
+        <th th:text="작성일"></th>
+        <th th:text="작성자"></th>
+        <th th:text="답변여부"></th>
+    </tr>
+    <tr th:each="inquiry : ${inquiries}">
+        <td th:text="${inquiry.title}" th:onclick="|location.href='@{/cs/inquiry/{id}(id=${inquiry.id})}'|"></td>
+        <td th:text="${inquiry.category}"></td>
+        <td th:text="${inquiry.createdAt}"></td>
+        <td th:text="${inquiry.author}"></td>
+        <td th:text="${inquiry.answer} ?: '답변 안됨'"></td>
+    </tr>
+</table>
+<br/>
+<a href="/cs/logout" th:text="로그아웃"></a><br/>
+</body>
+</html>

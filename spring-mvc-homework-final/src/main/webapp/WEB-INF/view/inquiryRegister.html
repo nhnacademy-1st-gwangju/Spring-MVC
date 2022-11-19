@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>NHN Mart CS Service - 문의 하기</title>
+</head>
+<body>
+<h1>문의 하기</h1>
+<form method="post" action="/cs/inquiry" enctype="multipart/form-data">
+    <span th:text="제목 + ': '"></span><input type="text" name="title" /><br />
+    <label>
+        <select name="category">
+            <option value="">--분류--</option>
+            <option value="Complaint">불만 접수</option>
+            <option value="Proposal">제안</option>
+            <option value="RefundOrExchange">환불/교환</option>
+            <option value="Praise">칭찬해요</option>
+            <option value="Etc">기타 문의</option>
+        </select>
+    </label><br />
+    <span th:text="본문 + ': '"></span><textarea name="content" rows="10" cols="80"></textarea><br />
+    <span th:text="작성자 + ': '"></span><input type="text" name="author" th:value="${#session.getAttribute('NAME')}" readonly /><br />
+    <span>이미지 파일</span><input type="file" multiple="multiple" name="imageFiles" accept="image/*"/>
+    <br />
+    <input type="submit" />
+</form><br />
+<a href="/cs" th:text="취소"></a>
+</body>
+</html>
