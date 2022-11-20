@@ -60,7 +60,7 @@
   - [취소] 버튼을 누르면 메인(고객 문의 목록) 페이지로 이동
 
 ## 개념 모델
-![img.png](img.png)
+![image](https://user-images.githubusercontent.com/60968342/202887248-a7ef3828-b3ae-4486-b5c6-d9c43a033709.png)
 
 ## API 샘플
 샘플이므로 참고만 하세요.  
