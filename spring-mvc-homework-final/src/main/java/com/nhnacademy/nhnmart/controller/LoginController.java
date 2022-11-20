@@ -9,12 +9,13 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
-import org.springframework.util.StringUtils;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 import java.util.Objects;
@@ -27,12 +28,16 @@ import static com.nhnacademy.nhnmart.domain.RoleUser.ROLE_USER;
 public class LoginController {
     private final UserRepository userRepository;
 
+    private static final String SESSION = "SESSION";
+
     @GetMapping("/login")
-    public String login(@CookieValue(value = "SESSION", required = false) String session,
-                        Model model) {
-        if (StringUtils.hasText(session)) {
+    public String login(HttpServletRequest request, Model model) {
+        HttpSession httpSession = request.getSession(false);
+
+        if (Objects.nonNull(httpSession) && httpSession.getAttribute(SESSION) != null) {
+            String session = httpSession.getAttribute(SESSION).toString();
             model.addAttribute("id", session);
-            return "index";
+            return "redirect:/cs";
         } else {
             return "loginForm";
         }
@@ -50,12 +55,12 @@ public class LoginController {
         checkUserExist(request.getId(), request.getPwd());
 
         User user = userRepository.getUser(request.getId());
-        session.setAttribute("SESSION", user.getRole().toString());
+        session.setAttribute(SESSION, user.getRole().toString());
         session.setAttribute("NAME", user.getName());
 
         modelMap.put("id", session);
 
-        return goMainPage(user);
+        return goToMainPageByUserRole(user);
     }
 
     private void checkUserExist(String id, String pwd) {
@@ -64,7 +69,7 @@ public class LoginController {
         }
     }
 
-    private String goMainPage(User user) {
+    private String goToMainPageByUserRole(User user) {
         if (user.getRole().equals(ROLE_USER)) {
             return "redirect:/cs";
         }
@@ -72,11 +77,11 @@ public class LoginController {
     }
 
     @GetMapping("/logout")
-    public String logout(HttpServletRequest request, HttpServletResponse response) {
+    public String logout(HttpServletRequest request) {
         HttpSession session = request.getSession(false);
 
         if (!Objects.isNull(session)) {
-            session.removeAttribute("SESSION");
+            session.removeAttribute(SESSION);
             session.removeAttribute("NAME");
         }
         return "index";

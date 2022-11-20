@@ -11,8 +11,6 @@ import org.springframework.mock.web.MockHttpSession;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
-import javax.servlet.http.Cookie;
-
 import static com.nhnacademy.nhnmart.domain.RoleUser.ROLE_ADMIN;
 import static com.nhnacademy.nhnmart.domain.RoleUser.ROLE_USER;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -38,16 +36,15 @@ class LoginControllerTest {
     }
 
     @Test
-    @DisplayName("이미 로그인이 되어 있는 경우 index 페이지를 반환한다.")
+    @DisplayName("이미 로그인이 되어 있는 경우 사용자 권한별 메인 페이지를 반환한다.")
     void login_alreadyLogon() throws Exception {
         String session = "SESSION";
         String sessionValue = "sessionValue";
-        Cookie cookie = new Cookie(session, sessionValue);
 
         mockMvc.perform(get("/cs/login")
-                        .cookie(cookie))
-                .andExpect(status().isOk())
-                .andExpect(view().name("index"));
+                        .sessionAttr(session, sessionValue))
+                .andExpect(status().is3xxRedirection())
+                .andExpect(view().name("redirect:/cs"));
     }
 
     @Test
