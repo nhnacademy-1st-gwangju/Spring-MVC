@@ -58,19 +58,24 @@ public class InquiryController {
 
     private void uploadImageFiles(InquiryRegisterRequest request, String uploadDir) throws IOException {
         List<MultipartFile> imageFiles = request.getImageFiles();
+        List<String> fileDirs = getFileDirs(uploadDir, imageFiles);
+        inquiryRepository.registerInquiry(request.getTitle(), request.getCategory(), request.getContent(), request.getAuthor(), fileDirs);
+    }
 
+    private List<String> getFileDirs(String uploadDir, List<MultipartFile> imageFiles) throws IOException {
+        List<String> fileDirs;
         if (!imageFiles.get(0).isEmpty()) {
             for (MultipartFile file : imageFiles) {
                 file.transferTo(Paths.get(uploadDir + file.getOriginalFilename()));
             }
 
-            List<String> fileDirs = imageFiles.stream()
+            fileDirs = imageFiles.stream()
                     .map(MultipartFile::getOriginalFilename)
                     .collect(Collectors.toList());
-            inquiryRepository.registerInquiry(request.getTitle(), request.getCategory(), request.getContent(), request.getAuthor(), fileDirs);
         } else {
-            inquiryRepository.registerInquiry(request.getTitle(), request.getCategory(), request.getContent(), request.getAuthor(), new ArrayList<>());
+            fileDirs = new ArrayList<>();
         }
+        return fileDirs;
     }
 
     @GetMapping("/inquiry/{inquiryId}")
